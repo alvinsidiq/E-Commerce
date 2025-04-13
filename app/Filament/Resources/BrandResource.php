@@ -5,13 +5,28 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\BrandResource\Pages;
 use App\Filament\Resources\BrandResource\RelationManagers;
 use App\Models\Brand;
+use create;
 use Filament\Forms;
+use Filament\Forms\Components\FileUpload;
+
+use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\Section;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
+
+
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Actions\ActionGroup;
+use Filament\Tables\Actions\DeleteAction;
+use Filament\Tables\Actions\EditAction;
+use Filament\Tables\Actions\ViewAction;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Str;
 
 class BrandResource extends Resource
 {
@@ -23,16 +38,35 @@ class BrandResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('name')
+                Section :: make()
+                ->schema([
+                    Grid:: make()
+                    ->schema ([
+                        TextInput::make('name')
+                        ->required()
+                        ->maxLength(255)
+                        ->live(onBlur: true)
+                        ->afterStateUpdated(function (string $operation, $state, Forms\Set $set) {
+                            if ($operation === 'create') {
+                                $set('slug', Str::slug($state));
+                            }
+                        }),
+                        TextInput :: make ('slug')
+                        ->required()
+                        ->maxLength(255)
+                        ->unique(\App\Models\Brand::class, 'slug', ignoreRecord: true)
+                        ->dehydrated()
+                        ->readOnly(),
+
+                    ]),
+                    FileUpload :: make ('image')
+                    ->image()
+                    ->directory('brands'),
+                    Toggle::make('is_active')
                     ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('slug')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\FileUpload::make('image')
-                    ->image(),
-                Forms\Components\Toggle::make('is_active')
-                    ->required(),
+                    ->default(true),
+                ]),
+               
             ]);
     }
 
@@ -40,33 +74,22 @@ class BrandResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('slug')
-                    ->searchable(),
-                Tables\Columns\ImageColumn::make('image'),
-                Tables\Columns\IconColumn::make('is_active')
-                    ->boolean(),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-            ])
-            ->filters([
-                //
-            ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
-            ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
+                TextColumn::make('name'),
+                TextColumn::make('slug'),
+                TextColumn::make('image'),
+                TextColumn::make('is_active'),
+                TextColumn::make('created_at'),
+                                   
+            ]) 
+             ->actions([
+               ActionGroup :: make([
+                   ViewAction :: make(),
+                   EditAction :: make(),
+                   DeleteAction :: make(),
+               ]),
             ]);
+           
+           
     }
 
     public static function getRelations(): array
