@@ -37,6 +37,6 @@ class Order extends Model
     // satu order memiliki satu address
     public function address()
     {
-        return $this->hashone(Address::class);
+        return $this->hasOne(Addres::class);
     }
 }
