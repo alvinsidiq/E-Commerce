@@ -130,7 +130,7 @@ class ProductResource extends Resource
                ->sortable(),
                TextColumn::make('price')
                ->money('IDR'),
-               IconColumn::make('in_featured')
+               IconColumn::make('is_featured')
                ->boolean(),
                IconColumn::make('on_sale')
                ->boolean(),
