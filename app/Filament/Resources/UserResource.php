@@ -20,9 +20,14 @@ use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Actions\ViewAction;
 
+use Illuminate\Contracts\Support\Htmlable; 
+use Illuminate\Database\Eloquent\Model;
+
 class UserResource extends Resource
 {
+    public static ?int $navigationSort = 1;
     protected static ?string $model = User::class;
+    public static ?string $recordTitleAttribute = 'name';
 
     protected static ?string $navigationIcon = 'heroicon-o-user-group';
 
@@ -68,6 +73,9 @@ class UserResource extends Resource
 
                 ]),
             ]);
+            
+
+            
 
 
             // ->filters([
@@ -89,6 +97,7 @@ class UserResource extends Resource
             OrdersRelationManager::class,
         ];
     }
+    
 
     public static function getPages(): array
     {
@@ -98,4 +107,15 @@ class UserResource extends Resource
             'edit' => Pages\EditUser::route('/{record}/edit'),
         ];
     }
+
+    public static function getGlobalSearchResultTitle(Model $record): Htmlable|string
+{
+    return $record->name;
+}
+
+public static function getGloballySearchableAttributes(): array
+{
+    return ['name', 'email'];
+}
+
 }

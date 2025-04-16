@@ -32,6 +32,7 @@ use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Filters\SelectFilter;
 class ProductResource extends Resource
 {
+    public static ?int $navigationSort = 4;
     protected static ?string $model = Product::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-squares-2x2';

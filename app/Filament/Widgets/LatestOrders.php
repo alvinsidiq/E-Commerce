@@ -1,44 +1,30 @@
 <?php
 
-namespace App\Filament\Resources\UserResource\RelationManagers;
-
-use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\RelationManagers\RelationManager;
-use Filament\Tables;
-use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
-
+namespace App\Filament\Widgets;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Actions\Action;
-
-use Filament\Tables\Actions\DeleteAction;
-use App\Models\Order;
-
+use Filament\Tables;
+use Filament\Tables\Table;
+use Filament\Widgets\TableWidget as BaseWidget;
 use App\Filament\Resources\OrderResource;
-
-class OrdersRelationManager extends RelationManager
+use App\Models\Order;
+class LatestOrders extends BaseWidget
 {
-    protected static string $relationship = 'orders';
-
-    public function form(Form $form): Form
-    {
-        return $form
-            ->schema([
-               
-            ]);
-    }
-
+   protected string|array|int $columnSpan ='full';
+   protected static ?int $sort = 2;
     public function table(Table $table): Table
     {
+        
         return $table
-        ->columns([
+           ->query(OrderResource::getEloquentQuery())
+           ->defaultPaginationPageOption(5)
+           ->defaultSort('created_at', 'desc')
+           ->columns([ 
             TextColumn::make('id')
                 ->label('Order ID')
                 ->searchable(),
             TextColumn::make('grand_total')
-                ->money('IDR'),
+                ->money('INR'),
             TextColumn::make('status')
                 ->badge()
                 ->color(fn (string $state): string => match ($state) {
@@ -66,19 +52,14 @@ class OrdersRelationManager extends RelationManager
             TextColumn::make('created_at')
                 ->label('Order Date')
                 ->dateTime(),
-            TextColumn :: make('user.name')
-            ->label('customer')
-            ->searchable(),
-        ])
-        ->filters([])
-        ->headerActions([])
-        ->actions([
-            Action::make('view_order')
-                ->url(fn (Order $record): string => OrderResource::getUrl('view', ['record' => $record]))
-                ->color('info')
-                ->icon('heroicon-o-eye'),
-            DeleteAction::make(),
-        ])
-        ->bulkActions([]);
+            TextColumn::make('user.name')
+                ->label('Customer')
+                ->searchable(),
+           ])
+           ->actions([
+            Action:: make('View_Order')
+            ->url(fn (Order $record): string => OrderResource::getUrl('view', ['record' => $record]))
+            ->icon('heroicon-o-eye'),
+           ]);
     }
 }

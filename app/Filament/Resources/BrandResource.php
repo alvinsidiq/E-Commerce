@@ -30,6 +30,7 @@ use Illuminate\Support\Str;
 
 class BrandResource extends Resource
 {
+    public static ?int $navigationSort = 2;
     protected static ?string $model = Brand::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-computer-desktop';

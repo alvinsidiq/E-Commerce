@@ -35,6 +35,7 @@ use Filament\Tables\Actions\DeleteAction;
 
 class OrderResource extends Resource
 {
+    public static ?int $navigationSort = 5;
     protected static ?string $model = Order::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-shopping-bag';
