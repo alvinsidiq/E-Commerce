@@ -69,13 +69,17 @@ class ProductResource extends Resource
                     ->fileAttachmentsDirectory('products')
                     ->columnSpanFull(),
                     ]),
-                Section :: make ('Images')
+                Section :: make ('images')
                 ->schema([
-                    FileUpload :: make ('image')
+                    FileUpload :: make ('images')
                     ->multiple()
                     ->directory('products')
                     ->maxFiles(5)
-                    ->reorderable(),
+                    ->dehydrated()
+                    ->reorderable()
+                    ->statePath('images')
+                    ->required()
+                    ->visibility('public'),
                 ]),
 
             ]),

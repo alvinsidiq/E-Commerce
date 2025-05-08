@@ -24,7 +24,7 @@ Route::get('/',Homepage::class);
 Route::get('/categories',CategoriesPage::class);
 Route::get('/products',ProductsPage::class);
 Route::get('/cart',CartPage::class);
-Route::get('/product/{id}',ProductDetailPage :: class);
+Route::get('/product/{slug}',ProductDetailPage :: class)->name('product.detail');
 Route::get('/checkout', CheckoutPage :: class);
 Route::get('/my-orders', MyOrdersPage :: class);
 Route::get ('/my-orders/{id}', MyOrderDetailPage::class);
