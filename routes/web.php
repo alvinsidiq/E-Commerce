@@ -1,12 +1,12 @@
 <?php
 use App\Livewire\Homepage;
 use App\Livewire\CategoriesPage;
-use App\livewire\ProductsPage;
-use App\livewire\CartPage;
-use App\livewire\ProductDetailPage;
-use App\livewire\CheckoutPage;
-use App\livewire\MyOrdersPage;
-use App\livewire\MyOrderDetailPage;
+use App\Livewire\ProductsPage;
+use App\Livewire\CartPage;
+use App\Livewire\ProductDetailPage;
+use App\Livewire\CheckoutPage;
+use App\Livewire\MyOrdersPage;
+use App\Livewire\MyOrderDetailPage;
 use App\Livewire\Auth\LoginPage;
 use App\Livewire\Auth\RegisterPage;
 use App\Livewire\Auth\ForgetPasswordPage;

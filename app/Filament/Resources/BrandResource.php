@@ -62,7 +62,10 @@ class BrandResource extends Resource
                     ]),
                     FileUpload :: make ('image')
                     ->image()
-                    ->directory('brands'),
+                    ->directory('brands')
+                    ->imagePreviewHeight('150')
+                    ,
+                    
                     Toggle::make('is_active')
                     ->required()
                     ->default(true),
